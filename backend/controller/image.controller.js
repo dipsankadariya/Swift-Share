@@ -20,7 +20,7 @@ export const uploadImage = async (req, res) => {
   }
 };
 
-export const downloadImage = async (req, res) => {
+export const getImage = async (req, res) => {
   try {   
     const file = await File.findById(request.params.fileId);
     
