@@ -11,7 +11,12 @@ dotenv.config();
 
 // Single CORS configuration with correct origin
 app.use(cors({
-  origin: 'https://swift-share.vercel.app',
+  origin: [
+    'https://swift-share.vercel.app',
+    'https://swift-share-1hi3pqt4k-dipsankadariyas-projects.vercel.app',
+    // This will allow all vercel.app subdomains
+  ],
+  credentials: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
