@@ -8,14 +8,24 @@ const app = express();
 
 dotenv.config();
 
-// Minimal CORS config
+// Enable parsing JSON and URL-encoded bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// CORS configuration
 app.use(cors({
-  origin: ['https://swift-share.vercel.app/',
-    'https://swift-share-ecbfw3rz2-dipsankadariyas-projects.vercel.app/' ],
-   // Fixed semicolon to comma
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
+  origin: [
+    'https://swift-share-rjhwdx0bv-dipsankadariyas-projects.vercel.app',
+    'https://swift-share.vercel.app',
+    'http://localhost:3000'
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static('uploads'));
 
 app.use('/', router);
 

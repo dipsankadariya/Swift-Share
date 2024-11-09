@@ -8,10 +8,16 @@ export const uploadFile = async (data) => {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
+      timeout: 30000 // 30 second timeout
     });
     return response.data;
   } catch (error) {
-    console.error('Upload error:', error.message);
-    throw error;
+    if (error.response) {
+      throw new Error(error.response.data.error || 'Upload failed');
+    } else if (error.request) {
+      throw new Error('Network error - please check your connection');
+    } else {
+      throw new Error('Error uploading file');
+    }
   }
-}
+};
