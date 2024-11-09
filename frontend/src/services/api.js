@@ -4,14 +4,15 @@ const API_URL = 'https://swift-share-backend-dipsankadariyas-projects.vercel.app
 
 export const uploadFile = async (data) => {
   try {
-    let response = await axios.post(`${API_URL}/upload`, data, {
+    const response = await axios.post(`${API_URL}/upload`, data, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      }
+        'Content-Type': 'multipart/form-data'
+      },
+      withCredentials: true
     });
     return response.data;
   } catch (error) {
-    console.log('Error while calling the API ', error.message);
+    console.error('Upload error:', error.message);
     throw error;
   }
 }

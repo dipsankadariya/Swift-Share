@@ -6,30 +6,24 @@ import DBconnection from './database/db.js';
 
 const app = express();
 
-// Configure dotenv
 dotenv.config();
 
-// Single CORS configuration with correct origin
+// Minimal CORS config
 app.use(cors({
   origin: [
     'https://swift-share.vercel.app',
     'https://swift-share-1hi3pqt4k-dipsankadariyas-projects.vercel.app',
-    // This will allow all vercel.app subdomains
+    'https://swift-share-backend-dipsankadariyas-projects.vercel.app'
   ],
-  credentials: true, // Only this line is necessary for credentials
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true
 }));
 
-// Define the port
-const PORT = process.env.PORT || 5000;
-
-// Use your routes
 app.use('/', router);
 
+// Connect to DB
 DBconnection();
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
