@@ -36,6 +36,9 @@ function App() {
         <h1 className="text-7xl md:text-9xl font-bold tracking-tighter text-black uppercase">
         Swift Share
         </h1>
+        <p className="mt-4 text-sm text-gray-600">
+          This website is hosted on a free-tier hosting platform. Due to this, if inactive for a long time, the service might get paused. If it doesn't work the first time, please refresh the page and try again.
+        </p>
       </header>
 
       <main className="flex-grow px-6 max-w-5xl mx-auto w-full">
@@ -80,13 +83,14 @@ function App() {
               <div className="flex items-start gap-6">
                 <span className="text-6xl font-bold">1</span>
                 <p className="text-lg leading-tight pt-3">
-                  Select your file using the upload button
+                  Select the file to share.
                 </p>
               </div>
               <div className="flex items-start gap-6">
                 <span className="text-6xl font-bold">2</span>
                 <p className="text-lg leading-tight pt-3">
-                  Wait for the upload to complete. A link will be Generated.
+                  Wait for the upload to complete for few seconds.
+                  A link will be Generated below.
                 </p>
               </div>
               <div className="flex items-start gap-6">
