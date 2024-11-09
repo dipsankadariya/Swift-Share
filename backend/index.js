@@ -10,7 +10,9 @@ dotenv.config();
 
 // Minimal CORS config
 app.use(cors({
-  origin: 'https://swift-share.vercel.app/',  // Fixed semicolon to comma
+  origin: ['https://swift-share.vercel.app/',
+    'https://swift-share-ecbfw3rz2-dipsankadariyas-projects.vercel.app/' ],
+   // Fixed semicolon to comma
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
