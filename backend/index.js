@@ -9,10 +9,12 @@ const app = express();
 // Configure dotenv
 dotenv.config();
 
-// Use CORS with default settings (allows all origins)
-app.use(cors());
+// Single CORS configuration with correct origin
 app.use(cors({
-  origin: 'https://swift-share.vercel.app/',
+  origin: 'https://swift-share.vercel.app',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Define the port
