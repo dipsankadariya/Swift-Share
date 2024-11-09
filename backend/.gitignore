@@ -1,2 +1,30 @@
-node_modules
+# Ignore node_modules
+node_modules/
+
+# Ignore environment variable files
 .env
+
+# Ignore log files
+*.log
+
+# Ignore the local development environment files
+*.env.local
+
+# Ignore the IDE/editor config files (if you're using VSCode or other editors)
+.vscode/
+.idea/
+
+# Ignore package-lock and yarn.lock if you don't want to track lock files
+package-lock.json
+yarn.lock
+
+# Ignore npm debug log
+npm-debug.log
+
+# Ignore build/production files
+/dist
+/build
+
+# Ignore the database or temporary files (if you are using MongoDB or similar)
+*.db
+*.sqlite
