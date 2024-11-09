@@ -12,7 +12,7 @@ dotenv.config();
 // Use CORS with default settings (allows all origins)
 app.use(cors());
 app.use(cors({
-  origin: 'https://swift-share.vercel.app/'
+  origin: 'https://swift-share.vercel.app/',
 }));
 
 // Define the port
