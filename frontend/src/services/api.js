@@ -12,12 +12,7 @@ export const uploadFile = async (data) => {
     });
     return response.data;
   } catch (error) {
-    if (error.response) {
-      throw new Error(error.response.data.error || 'Upload failed');
-    } else if (error.request) {
-      throw new Error('Network error - please check your connection');
-    } else {
-      throw new Error('Error uploading file');
-    }
+    console.error('Upload error:', error.message);
+    throw error; // Keep the original error handling to match your front-end error handling
   }
 };
