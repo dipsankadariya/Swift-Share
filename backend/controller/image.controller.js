@@ -21,18 +21,16 @@ export const uploadImage = async (req, res) => {
 };
 
 export const downloadImage = async (req, res) => {
-  try {
-    const file = await File.findById(req.params.fileId);
-    if (!file) {
-      return res.status(404).json({ error: 'File not found' });
-    }
-
+  try {   
+    const file = await File.findById(request.params.fileId);
+    
     file.downloadCount++;
+
     await file.save();
 
     res.download(file.path, file.name);
-  } catch (error) {
-    console.error('Download error:', error);
-    res.status(500).json({ error: 'Error downloading file' });
-  }
-};
+} catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: error.message });
+}
+}
