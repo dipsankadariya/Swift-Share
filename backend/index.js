@@ -16,8 +16,7 @@ app.use(cors({
     'https://swift-share-1hi3pqt4k-dipsankadariyas-projects.vercel.app',
     // This will allow all vercel.app subdomains
   ],
-  credentials: true,
-  credentials: true,
+  credentials: true, // Only this line is necessary for credentials
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
