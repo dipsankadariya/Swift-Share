@@ -22,7 +22,7 @@ export const uploadImage = async (req, res) => {
 
 export const getImage = async (req, res) => {
   try {   
-    const file = await File.findById(res.params.fileId);
+    const file = await File.findById(req.params.fileId);
     
     file.downloadCount++;
 
