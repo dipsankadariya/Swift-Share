@@ -13,7 +13,7 @@ export const uploadImage = async (req, res) => {
   
   try {
     const file = await File.create(fileObject);
-    res.status(200).json({ path: `https://swift-share-backend.vercel.app/file/${file._id}` });
+    res.status(200).json({ path: `https://swift-share-218z.onrender.com/${file._id}` }); // Changed URL to localhost
   } catch (error) {
     console.error('Upload error:', error);
     res.status(500).json({ error: 'Error uploading file' });

@@ -10,14 +10,10 @@ dotenv.config();
 
 // Minimal CORS config
 app.use(cors({
-  origin: [
-    'https://swift-share.vercel.app',
-    'https://swift-share-1hi3pqt4k-dipsankadariyas-projects.vercel.app',
-    'https://swift-share-backend-dipsankadariyas-projects.vercel.app'
-  ],
+  origin:'*',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
-  credentials: true
+
 }));
 
 app.use('/', router);
