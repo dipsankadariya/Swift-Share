@@ -86,13 +86,13 @@ function App() {
               <div className="flex items-start gap-6">
                 <span className="text-6xl font-bold">2</span>
                 <p className="text-lg leading-tight pt-3">
-                  Wait for the upload to complete
+                  Wait for the upload to complete. A link will be Generated.
                 </p>
               </div>
               <div className="flex items-start gap-6">
                 <span className="text-6xl font-bold">3</span>
                 <p className="text-lg leading-tight pt-3">
-                  Copy and share the generated link
+                  Copy and share the generated link,to Download.
                 </p>
               </div>
             </div>
