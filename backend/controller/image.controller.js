@@ -10,7 +10,7 @@ export const uploadImage = async (req, res) => {
   
   try {
     const file = await File.create(fileObject);
-    res.status(200).json({ path: `http://localhost:5000/file/${file._id}` });
+    res.status(200).json({ path: `https://swift-share-backend.vercel.app/file/${file._id}` });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ error: error.message });
