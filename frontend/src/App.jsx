@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { uploadFile } from './services/api';
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
   const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const MAX_FILE_SIZE_MB = 100;
 
@@ -20,26 +21,36 @@ function App() {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-
     if (!selectedFile) {
       setStatus('');
       return;
     }
+    processFile(selectedFile);
+  };
 
+  const processFile = (selectedFile) => {
     if (selectedFile.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
       setStatus(`File size exceeds ${MAX_FILE_SIZE_MB}MB limit`);
       return;
     }
-
     setStatus('Uploading...');
     setFile(selectedFile);
   };
+
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const droppedFile = e.dataTransfer.files[0];
+      processFile(droppedFile);
+    }
+  }, []);
 
   useEffect(() => {
     const upload = async () => {
       if (file) {
         setProgress(0);
-
         const data = new FormData();
         data.append("name", file.name);
         data.append("file", file);
@@ -89,12 +100,31 @@ function App() {
               Upload and share files instantly
             </p>
 
-            <button
-              onClick={handleUploadButton}
-              className="w-full py-6 px-8 bg-black text-white hover:bg-gray-900 transition-colors duration-300 text-lg uppercase tracking-widest"
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                setIsDragging(false);
+              }}
+              onDrop={handleDrop}
+              className={`w-full border-4 border-dashed ${
+                isDragging ? 'border-green-500 bg-green-100' : 'border-gray-400'
+              } rounded-lg p-8 text-center transition-all duration-200`}
             >
-              Select File
-            </button>
+              <p className="text-lg uppercase tracking-wider">
+                {isDragging ? 'Drop here to upload' : 'Drag and drop your file here'}
+              </p>
+              <p className="text-sm text-gray-500 mt-2">or</p>
+              <button
+                onClick={handleUploadButton}
+                className="mt-4 py-3 px-6 bg-black text-white hover:bg-gray-900 transition-colors duration-300 text-base uppercase tracking-widest"
+              >
+                Select File
+              </button>
+            </div>
 
             <p className="mt-2 text-sm uppercase tracking-widest text-gray-500">
               Max file size: {MAX_FILE_SIZE_MB}MB
@@ -149,14 +179,13 @@ function App() {
               <div className="flex items-start gap-6">
                 <span className="text-6xl font-bold">1</span>
                 <p className="text-lg leading-tight pt-3">
-                  Select the file to share.
+                  Select or drag-and-drop the file to share.
                 </p>
               </div>
               <div className="flex items-start gap-6">
                 <span className="text-6xl font-bold">2</span>
                 <p className="text-lg leading-tight pt-3">
-                  Wait for the upload to complete for few seconds.
-                  A link will be generated below.
+                  Wait for the upload to complete. A link will be generated below.
                 </p>
               </div>
               <div className="flex items-start gap-6">
