@@ -5,37 +5,69 @@ function App() {
   const fileInputRef = useRef();
   const [file, setFile] = useState('');
   const [result, setResult] = useState('');
-  const [status, setStatus] = useState(''); // Upload status
+  const [status, setStatus] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   const MAX_FILE_SIZE_MB = 100;
 
   const handleUploadButton = () => {
+    setResult('');
     setStatus('Selecting file...');
+    fileInputRef.current.value = '';
     fileInputRef.current.click();
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) {
+      setStatus('');
+      return;
+    }
+
+    if (selectedFile.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      setStatus(`File size exceeds ${MAX_FILE_SIZE_MB}MB limit`);
+      return;
+    }
+
+    setFile(selectedFile);
+  };
+
   useEffect(() => {
-    const getImage = async () => {
+    const upload = async () => {
       if (file) {
         setStatus('Uploading...');
+        setProgress(0);
+
         const data = new FormData();
         data.append("name", file.name);
         data.append("file", file);
 
         try {
-          let response = await uploadFile(data);
+          const response = await uploadFile(data, (event) => {
+            const percent = Math.round((event.loaded * 100) / event.total);
+            setProgress(percent);
+          });
           setResult(response.path);
           setStatus('Successfully uploaded!');
-          console.log("File uploaded:", response);
-        } catch (error) {
-          console.error("Error uploading file:", error);
+        } catch {
           setStatus('Upload failed. Please try again.');
         }
       }
     };
-
-    getImage();
+    upload();
   }, [file]);
+
+  const handleCopy = async () => {
+    if (!result) return;
+    try {
+      await navigator.clipboard.writeText(result);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      alert('Failed to copy');
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-black font-mono">
@@ -69,7 +101,7 @@ function App() {
             <input
               type="file"
               ref={fileInputRef}
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={handleFileChange}
               className="hidden"
             />
 
@@ -77,17 +109,34 @@ function App() {
               <p className="text-base text-gray-700 font-semibold">{status}</p>
             )}
 
+            {progress > 0 && progress < 100 && (
+              <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                <div
+                  className="bg-black h-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            )}
+
             {result && (
               <div className="pt-10 border-t border-black">
                 <p className="text-lg uppercase tracking-widest mb-4">Your share link:</p>
-                <a
-                  href={result}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-lg break-all underline decoration-1 hover:text-gray-600"
-                >
-                  {result}
-                </a>
+                <div className="bg-gray-100 border border-black p-4 rounded-lg flex items-center justify-between">
+                  <a
+                    href={result}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-black font-semibold break-all underline"
+                  >
+                    {result}
+                  </a>
+                  <button
+                    onClick={handleCopy}
+                    className="ml-4 bg-black text-white px-3 py-1 rounded hover:bg-gray-800"
+                  >
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
               </div>
             )}
           </section>
@@ -105,13 +154,13 @@ function App() {
                 <span className="text-6xl font-bold">2</span>
                 <p className="text-lg leading-tight pt-3">
                   Wait for the upload to complete for few seconds.
-                  A link will be Generated below.
+                  A link will be generated below.
                 </p>
               </div>
               <div className="flex items-start gap-6">
                 <span className="text-6xl font-bold">3</span>
                 <p className="text-lg leading-tight pt-3">
-                  Copy and share the generated link, to Download.
+                  Copy and share the generated link to download.
                 </p>
               </div>
             </div>
@@ -122,7 +171,7 @@ function App() {
       <footer className="py-12 px-6">
         <div className="max-w-5xl mx-auto">
           <p className="text-base uppercase tracking-widest text-gray-500">
-            Created by @DipsanKadariya , © 2024 | No Copyright
+            Created by @DipsanKadariya, © {new Date().getFullYear()} | No Copyright
           </p>
         </div>
       </footer>
