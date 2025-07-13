@@ -5,14 +5,19 @@ function App() {
   const fileInputRef = useRef();
   const [file, setFile] = useState('');
   const [result, setResult] = useState('');
+  const [status, setStatus] = useState(''); // Upload status
+
+  const MAX_FILE_SIZE_MB = 100;
 
   const handleUploadButton = () => {
+    setStatus('Selecting file...');
     fileInputRef.current.click();
   };
 
   useEffect(() => {
     const getImage = async () => {
       if (file) {
+        setStatus('Uploading...');
         const data = new FormData();
         data.append("name", file.name);
         data.append("file", file);
@@ -20,9 +25,11 @@ function App() {
         try {
           let response = await uploadFile(data);
           setResult(response.path);
+          setStatus('Successfully uploaded!');
           console.log("File uploaded:", response);
         } catch (error) {
           console.error("Error uploading file:", error);
+          setStatus('Upload failed. Please try again.');
         }
       }
     };
@@ -34,7 +41,7 @@ function App() {
     <div className="min-h-screen flex flex-col bg-white text-black font-mono">
       <header className="w-full pt-12 pb-16 px-6 text-center">
         <h1 className="text-7xl md:text-9xl font-bold tracking-tighter text-black uppercase">
-        Swift Share
+          Swift Share
         </h1>
         <p className="mt-4 text-sm text-gray-600">
           This website is hosted on a free-tier hosting platform. Due to this, if inactive for a long time, the service might get paused. If it doesn't work the first time, please refresh the page and try again.
@@ -47,7 +54,7 @@ function App() {
             <p className="text-lg uppercase tracking-widest">
               Upload and share files instantly
             </p>
-            
+
             <button
               onClick={handleUploadButton}
               className="w-full py-6 px-8 bg-black text-white hover:bg-gray-900 transition-colors duration-300 text-lg uppercase tracking-widest"
@@ -55,12 +62,20 @@ function App() {
               Select File
             </button>
 
+            <p className="mt-2 text-sm uppercase tracking-widest text-gray-500">
+              Max file size: {MAX_FILE_SIZE_MB}MB
+            </p>
+
             <input
               type="file"
               ref={fileInputRef}
               onChange={(e) => setFile(e.target.files[0])}
               className="hidden"
             />
+
+            {status && (
+              <p className="text-base text-gray-700 font-semibold">{status}</p>
+            )}
 
             {result && (
               <div className="pt-10 border-t border-black">
@@ -96,7 +111,7 @@ function App() {
               <div className="flex items-start gap-6">
                 <span className="text-6xl font-bold">3</span>
                 <p className="text-lg leading-tight pt-3">
-                  Copy and share the generated link,to Download.
+                  Copy and share the generated link, to Download.
                 </p>
               </div>
             </div>
