@@ -13,13 +13,14 @@ function App() {
 
   const handleUploadButton = () => {
     setResult('');
-    setStatus('Selecting file...');
+    setStatus('');
     fileInputRef.current.value = '';
     fileInputRef.current.click();
   };
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
+
     if (!selectedFile) {
       setStatus('');
       return;
@@ -30,13 +31,13 @@ function App() {
       return;
     }
 
+    setStatus('Uploading...');
     setFile(selectedFile);
   };
 
   useEffect(() => {
     const upload = async () => {
       if (file) {
-        setStatus('Uploading...');
         setProgress(0);
 
         const data = new FormData();
@@ -55,6 +56,7 @@ function App() {
         }
       }
     };
+
     upload();
   }, [file]);
 
@@ -171,7 +173,7 @@ function App() {
       <footer className="py-12 px-6">
         <div className="max-w-5xl mx-auto">
           <p className="text-base uppercase tracking-widest text-gray-500">
-            Created by @DipsanKadariya, © {new Date().getFullYear()} | No Copyright
+            Created by @DipsanKadariya, © {new Date().getFullYear()}
           </p>
         </div>
       </footer>
